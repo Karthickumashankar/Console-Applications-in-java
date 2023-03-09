@@ -1,0 +1,308 @@
+import java.util.*;
+import java.util.Map.Entry;
+public class ATM {
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int balance=50000;
+		int sum=0;
+		int pin=1111;
+		HashMap<Integer,Integer> hash=new HashMap<Integer,Integer>();
+		   hash.put(2000,5);
+		   hash.put(500,5);
+		   hash.put(200,5);
+		   hash.put(100,5);
+		ArrayList<String> ss=new ArrayList<String>();
+		System.out.println("-----ABC BANK AUTOMATED TELLER MACHINE-----");
+		System.out.println("1.ADMIN / 2.USER ---- ?");
+		while(sc.hasNext()) {
+			int n=sc.nextInt();
+			if(n==1) {
+				System.out.println("Enter the pin number");
+				int a=sc.nextInt();
+				int b=1111;
+				if(a!=b) {
+					System.out.println("Sorry! Invalid Pin number.");
+					System.out.println("\n-----ABC BANK AUTOMATED TELLER MACHINE-----");
+					System.out.println("1.ADMIN / 2.USER ---- ?");
+					continue;
+				}
+				System.out.println("Welcome to ABC Bank ATM\n1.Load Amount\n2.Balance Check\n3.Exit");
+				int option=sc.nextInt();
+				switch(option) {
+				case 1:
+					for(Entry<Integer, Integer> i : hash.entrySet()) {
+						 System.out.println("How many "+i.getKey()+" want to load");
+						 int note=sc.nextInt();
+						 if(note+i.getValue()>100) {
+							 System.out.println("The limit of each amount is about 100, so we return "+((note+i.getValue())-100)+"\n");
+							 hash.put(i.getKey(),100);
+						 }
+						 else {
+							 hash.put(i.getKey(),hash.get(i.getKey())+note);
+						 }
+						 }
+					System.out.println(" Cash        Notes\n------      -------");
+					for(Entry<Integer, Integer> i : hash.entrySet())
+					   {    
+						    
+						    System.out.println(" "+i.getKey()+"          "+i.getValue()); 
+						    
+					   } 
+					   System.out.println("Your Amount is Loaded Successfully.");
+					   break;
+				case 2:
+					sum=0;
+					for(Entry<Integer, Integer> i : hash.entrySet()) {
+						sum+=i.getKey()*i.getValue();
+						System.out.println(i.getKey()+"----->"+i.getValue());
+					}
+					System.out.println("Total Balance of ATM Machine: "+sum);
+					break;
+				case 3:
+				   break;
+				default:
+					System.out.println("Sorry! Invalid Choice.");
+				}
+			}
+			else if(n==2) {
+				System.out.println("Enter the User name:");
+				String name=sc.next();
+				int sum1=0;
+				for(Entry<Integer, Integer> i : hash.entrySet()){    
+					   sum1+=(i.getKey()*i.getValue());
+				}
+				System.out.println("Enter your pin number");
+				int Userpin=sc.nextInt();
+				if(Userpin!=pin) {
+					System.out.println("Sorry! Invalid Pin number.");
+					System.out.println("\n-----ABC BANK AUTOMATED TELLER MACHINE-----");
+					System.out.println("1.ADMIN / 2.USER ---- ?");
+					continue;
+				}
+				System.out.println("Press 1 for Balance Check. \nPress 2 For Withdrawal."
+						+ " \nPress 3 For Deposite.  \nPress 4 For Pin change."
+						+ " \nPress 5 For Mini Statement. \nPress 6 For Transfer\nPress 7 For EXIT");
+				int opt=sc.nextInt();
+				switch(opt) {
+				case 1:
+					System.out.println("The Account balance is: "+balance);
+					break;
+				case 2:
+					System.out.println("How much you want to withdraw?");
+					int amt=sc.nextInt();
+					int amt1=amt;
+					int a=0;
+					int	b=0;
+					int c=0;
+					int d=0;
+					if(amt>balance) {
+						System.out.println("You have Insufficient Balance.");
+					}
+					else if(amt>sum1) {
+						System.out.println("ATM has Insufficient Balance.");
+					}
+					else {
+						if(amt1>=2000) {
+							a=amt1/2000;
+							amt1=amt1%2000;
+						}
+						if(amt1 >= 500){ 
+						    b = amt1 / 500 ; 
+						    amt1 = amt1 % 500; 
+						} 
+						if(amt1 >= 200){ 
+							c=amt1/200;
+						    amt1 =amt1% 200;
+						}
+						if(amt1 >= 100){ 
+						    d = amt1 / 100 ; 
+						    amt1 = amt1 % 100;
+						}
+						if(amt1!=0){
+							   System.out.println("The amount should be in muliples of 100.");
+						}
+						else if(a<=hash.get(2000))
+						   {
+							   if(b<=hash.get(500))
+							   {
+								   if(c<=hash.get(200))
+								   {
+									   if(d<=hash.get(100))
+									   {
+										   System.out.println("Wait for the Transaction.\nCollect the cash!");
+										   hash.put(2000,hash.get(2000)-a);
+										   hash.put(500,hash.get(500)-b);
+										   hash.put(200,hash.get(200)-c);
+										   hash.put(100,hash.get(100)-d);
+										   balance-=amt;
+										   ss.add(amt+" is withdrawn from your Account.");
+									   } 
+									   else
+									   {
+										   System.out.println("The amount should be in muliples of 200");
+									   }
+								   }
+								   else if((c-hash.get(200))*2<=hash.get(100)-d)
+								   {
+									   System.out.println("Wait for the Transaction.\nCollect the cash!");
+									   hash.put(2000,hash.get(2000)-a);
+									   hash.put(500,hash.get(500)-b);
+									   hash.put(200,hash.get(200));
+									   hash.put(100,hash.get(100)-d-((c-(hash.get(200))*2)));
+									   balance-=amt;
+									   ss.add(amt+" is withdrawn from your Account.");
+								   }
+								   else{
+									   System.out.println("The amount should be in muliples of 500");
+							       }
+							   }
+							   else if((b-hash.get(500))*2<=hash.get(200)-c && b<hash.get(100)-d){
+								   System.out.println("Wait for the Transaction.\nCollect the cash!");
+								   hash.put(2000,hash.get(2000)-a);
+								   hash.put(500,hash.get(500));
+								   hash.put(200,hash.get(200)-c-((b-hash.get(500))*2));
+								   hash.put(100,hash.get(100)-d-b-hash.get(500));
+								   balance-=amt;
+								   ss.add(amt+" is withdrawn from your Account.");
+							   }
+							   else if((b-hash.get(500))*5<=hash.get(100)-d)
+							   {
+								   System.out.println("Wait for the Transaction.\nCollect the cash!");
+								   hash.put(2000,hash.get(2000)-a);
+								   hash.put(500,hash.get(500));
+								   hash.put(200,hash.get(200)-c);
+								   hash.put(100,hash.get(100)-d-((b-hash.get(500))*5));
+								   balance-=amt;
+								   ss.add(amt+" is withdrawn from Your Account.");
+							   }
+							   else
+							   {
+								   System.out.println("The amount should be in muliples of 2000");
+							   }
+						   }
+						else if((a-hash.get(2000))*4<=hash.get(500)-b)
+						   {
+							   System.out.println("Wait for the Transaction.\nCollect the cash!");
+							   hash.put(2000,0);
+							   hash.put(500,hash.get(500)-((a-hash.get(2000))*4)-b);
+							   hash.put(200,hash.get(200)-c);
+							   hash.put(100,hash.get(100)-d);
+							   balance-=amt;
+							   ss.add(amt+" is withdrawn from Your Account.");
+						   }
+						   else if((a-hash.get(2000))*10<=hash.get(200)-c)
+						   {
+							   System.out.println("Wait for the Transaction.\nCollect the cash!");
+							   hash.put(2000,0);
+							   hash.put(500,hash.get(500)-a);
+							   hash.put(200,hash.get(200)-c-((a-(hash.get(2000))*10)));
+							   hash.put(100,hash.get(100)-d);
+							   balance-=amt;
+							   ss.add(amt+" is withdrawn from Your Account.");
+						   }
+						   else if((a-hash.get(2000))*20<=hash.get(100)-b)
+						   {
+							   System.out.println("Wait for the Transaction.\nCollect the cash!");
+							   hash.put(2000,hash.get(2000));
+							   hash.put(500,hash.get(500)-a);
+							   hash.put(200,hash.get(200)-c);
+							   hash.put(100,hash.get(100)-d-((a-(hash.get(2000))*20)));
+							   balance-=amt;
+							   ss.add(amt+" is withdrawn from Your Account.");
+						   }
+						   else
+						   {
+							   System.out.println("ATM has Insufficient Balance.");
+						   }
+					}
+					break;
+				case 3:
+					System.out.println("how much you want deposite:");
+					   int x=sc.nextInt(),x2=0;;
+					   for(Entry<Integer, Integer> i : hash.entrySet())
+					   {    
+						    System.out.println("How many "+i.getKey()+" want to load");
+						    int x1=sc.nextInt();
+						    hash.put(i.getKey(),hash.get(i.getKey())+x1);
+						    x2+=x1*i.getKey();
+					   }
+					   if(x2!=x)
+					   {
+						   System.out.println("Sorry! Your denomination is Invalid.");
+					   }
+					   else
+					   {
+						   balance+=x;
+						   System.out.println("The Amount is Successfully deposited.");
+						   ss.add(x+" is deposited to your Account.");
+					   }
+					   break;
+				case 4:
+					System.out.println("Enter your Old Pin: ");
+					   int y1=sc.nextInt();
+					   if(pin==y1)
+					   {
+						   System.out.println("Enter the New Pin: ");
+						   int y2=sc.nextInt();
+						   System.out.println("Re-enter the New Pin: ");
+						   int y3=sc.nextInt();
+						   if(y2==y3)
+						   {
+							   pin=y2;
+							   System.out.println("Your pin is changed successfully");
+						   }
+						   else
+						   {
+							   System.out.println("Sorry! Pin Mismatch.");
+						   }
+					   }
+					   else
+					   {
+						   System.out.println("Sorry! Invalid pin....");
+					   }
+					   break;
+				case 5:
+					System.out.println();
+					System.out.println("*********MINI STATEMENT*********");
+					if(ss.size()<5)
+					   {
+						   for(int i=0;i<ss.size();i++)
+						   {
+							   System.out.println(ss.get(i));
+						   }
+					   }
+					   else
+					   {
+						   for(int i=ss.size()-5;i<ss.size();i++)
+						   {
+							   System.out.println(ss.get(i));
+						   }
+					   }
+					   System.out.println();
+					   break;
+				case 6:
+
+					   System.out.println("Enter the Account Number or Account Holder Name which you want to transfer:");
+					   String an=sc.next();
+					   System.out.println("Enter the amount you want to transfer: ");
+					   int num=sc.nextInt();
+					   System.out.println("The amount is transfered successfully");
+					   balance-=num;
+					   ss.add(num+" is transfered to "+an);
+					   break;
+				case 7:
+					break;
+				default:
+					   System.out.println("Invalid Choice!");
+					   break;
+				}
+			}
+			else {
+				System.out.println("Sorry! Wrong Statement");
+			}
+			System.out.println("\n-----ABC BANK AUTOMATED TELLER MACHINE-----");
+			System.out.println("1.ADMIN / 2.USER ---- ?");
+		}
+		
+	}
+}
